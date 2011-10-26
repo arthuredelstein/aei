@@ -1,0 +1,81 @@
+.title { font-family: Georgia, Times New Roman, Times, Serif;
+	font-size: 16px;
+	font-weight: bold;
+	letter-spacing: 1px;	
+	color: #42524D }
+
+.dropdown { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-decoration: none;
+	line-height: 13px;
+	color: #FFFFFF }
+
+A.dropdown:link, A.dropdown:visited { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-decoration: none;
+	line-height: 13px;
+	color: #FFFFFF }
+
+A.dropdown:hover, A.dropdown:active { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 11px;
+	font-weight: bold;
+	text-decoration: none;
+	line-height: 13px;
+	color: #FFFF99 }
+
+.text { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 14px;
+	color: #000000 }
+
+.breadcrumb { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: none;
+	color: #666666 }
+
+A.breadcrumb:link, A.breadcrumb:visited { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	color: #666666 }
+
+A.breadcrumb:hover, A.breadcrumb:active { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: underline;
+	color: #6F8079 }
+
+.copyright { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	color: #6F8079 }
+
+A.copyright:link, A.copyright:visited { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: underline;
+	color: #6F8079 }
+
+A.copyright:hover, A.copyright:active { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: underline;
+	color: #339999 }
+
+.footer { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	color: #CDD3D0 }
+
+A.footer:link, A.footer:visited { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: none;
+	color: #CDD3D0 }
+
+A.footer:hover, A.footer:active { font-family: Arial, Helvetica, Sans-Serif;
+	font-size: 10px;
+	text-decoration: underline;
+	color: #CCFFFF }
+
+.searchbox { font-family: Arial, Helvetica, Sans-Serif;
+	width: 133px;	
+	border-color: #B4BEC1;
+	color: #000000;
+    	font-size: 11px;
+  	background-color: #B4BEC1; }
+
+	

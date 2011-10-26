@@ -1,0 +1,222 @@
+<!-- NAME public.tpl -->
+<HTML>
+<HEAD>
+<TITLE>E-mail Signup Page - Albert Einstein Institution</TITLE>
+
+<!--
+We are going to hard code the content of this style sheet file below because
+we cannot use include two style sheet files in the same file (NS6 does not
+like it).
+
+<LINK REL="stylesheet" 
+TYPE="text/css" 
+HREF="" 
+TITLE="">
+-->
+<style>
+P, td {	
+	font-family : Verdana,arial;
+	font-size : 10pt;
+}
+
+ul, li  {	
+	font-family : Verdana,arial;
+	font-size : 10pt;
+	list-style-type : disk;
+}
+
+H1, H2, H3, H4  {
+	font-family : Verdana,arial;
+	font-size : 14pt;
+}
+
+.bodytext  {
+	font-family : Verdana,arial;
+	font-size : 10pt;
+	list-style-type : disk;
+}
+
+.bordertext  {
+	font-size : 1pt;	
+}
+
+.title {
+
+}
+
+.header  {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+}
+
+.footer  {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+}
+
+.pageheading {
+
+}
+
+.pagehighlight {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+}
+
+.categories {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+}
+
+.feature_report {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+	color : '#FFFFFF';
+}
+.section_heading {
+	font-family : Verdana,arial;
+	font-size : 10pt;
+	font-weight : bold;
+}
+
+.section_subheading {
+	font-family : Verdana,arial;
+	font-size : 8pt;
+	font-style : italic;
+}
+
+.article_title {
+	font-weight : bold;
+}
+
+.article_author, .article_date {
+	font-style : italic;
+}
+
+.article_text {
+	font-family : Verdana,arial;
+	font-size : 10pt;
+}
+</style>
+<meta name="description" content="The Albert Einstein Institution is a nonprofit organization advancing the study and use of strategic nonviolent action in conflicts throughout the world. We are committed to the defense of freedom, democracy, and the reduction of political violence through the use of nonviolent action">
+<meta name="keywords" content="freedom, civil disobedience, conflict, protest, resistance, nonviolence, non-violence, nonviolent action, non-violent action">
+
+<link rel="stylesheet" href="/includes/styles.css" type="text/css">
+
+<script language="JavaScript" src="http://www.aeinstein.org/includes/global_functions_javascript.js"></script>
+
+</head>
+
+<?php
+include 'headerFile.php';
+?>
+</td>
+<td width=26><img src=images/spacer.gif width=26 height=1></td>
+<td valign=top><br>
+
+<!-- MAIN CONTENT AREA -->
+<!--=================================== Main Content Cell =====================================-->
+
+
+
+<!-- NAME Form.tpl -->
+
+
+
+	
+		<TABLE border="0" cellpadding="2" cellspacing="0" width="100%">
+			<TR>
+			<TD>
+			<p><p class="breadcrumb">E-mail List</p>
+
+<p class="title">E-mail List</p>
+
+<p class="text">Please fill out the form below to sign up for our e-mail list.  You will periodically receive information about the Albert Einstein Institution's activities.</p>
+			<br><br>'<font color="red">*</font>' Indicates required field</p>
+			</TD></TR>
+			<TR><TD>
+			<FORM NAME="input_form" ENCTYPE="multipart/form-data" ACTION="/signupResponse.html" METHOD="post"><TABLE><TR><TD CLASS="formBackground">
+<TABLE WIDTH="700" BORDER="0" CELLPADDING="2" CELLSPACING="1" VALIGN="top" ALIGN="CENTER" >
+  <TR>
+
+    <TD CLASS="defaultfont" VALIGN="top" >Email Address<font color="red">*</font></TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="email" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >First Name</TD>
+    <TD CLASS="" ></TD>
+
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="firstName" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >Last Name</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="lastName" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+
+    <TD CLASS="defaultfont" VALIGN="top" >Company/Organization</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="companyorganization" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >Address</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><TEXTAREA NAME="address" rows='4' cols='40' wrap='virtual' CLASS="defaultfont"></TEXTAREA></TD>
+
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >City</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="city" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >State/Province</TD>
+
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="state" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >ZIP</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="zip" VALUE="" size='20' maxlength='20' CLASS="defaultfont" ></TD>
+  </TR>
+
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >Country</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="country" VALUE="" size='40' maxlength='100' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >Phone</TD>
+    <TD CLASS="" ></TD>
+
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="phone" VALUE="" size='20' maxlength='20' CLASS="defaultfont" ></TD>
+  </TR>
+  <TR>
+    <TD CLASS="defaultfont" VALIGN="top" >Fax</TD>
+    <TD CLASS="" ></TD>
+    <TD CLASS="defaultfont" VALIGN="top" ><INPUT TYPE="text" NAME="fax" VALUE="" size='20' maxlength='20' CLASS="defaultfont" ><INPUT TYPE="hidden" NAME="processID" VALUE="1" ><INPUT TYPE="hidden" NAME="orgid" VALUE="88" ><INPUT TYPE="hidden" NAME="requiredFields" VALUE="email" ><INPUT TYPE="hidden" NAME="gotoStep" VALUE="2" ><INPUT TYPE="hidden" NAME="signupMethod" VALUE="webPage" ></TD>
+  </TR>
+  <TR>
+
+    <TD CLASS="defaultfont" VALIGN="top" COLSPAN="3"><INPUT CLASS="defaultfont" TYPE="submit" VALUE="Continue" NAME="form_action"><br></TD>
+  </TR>
+</TABLE>
+</TD></TR></TABLE>
+</FORM>
+			</TD></TR>
+		</TABLE>
+
+
+<!-- END Form.tpl -->
+<!-- NAME: blank.tpl -->
+<!-- No content -->
+<!-- END: blank.tpl -->
+
+<!--=================================== End Main Content Cell =====================================-->
+
+<?php
+include 'footerFile.php';
+?>
