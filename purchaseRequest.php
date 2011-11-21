@@ -11,7 +11,7 @@ foreach ($_POST as $key => $value) {
 
 $msg = $data;
 
-if (strlen($msg)>2) {
+if (strlen($msg)>2 && strpos($msg,"88888") == FALSE && strpos($msg,"hacker.org") == FALSE) {
 	mail("einstein@igc.org","AEI Web Site Publications Order",$msg);
 	mail("arthuredelstein@gmail.com","AEI Web Site Publications Order",$msg);
 	}
