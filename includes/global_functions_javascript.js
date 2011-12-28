@@ -113,12 +113,12 @@ function changeImages() {
 var preloadFlag = false;
 function preloadImages() {
 	if (document.images) {
-		nav_Content_h = newImage("/images/nav_Content_h.jpg");
-		nav_Community_h = newImage("/images/nav_Community_h.jpg");
-		nav_ECommerce_h = newImage("/images/nav_ECommerce_h.jpg");
-		nav_LinkGen_h = newImage("/images/nav_LinkGen_h.jpg");
-		nav_Help_h = newImage("/images/nav_Helpt_h.jpg");
-		nav_LogOff_h = newImage("/images/nav_LogOff_h.jpg");
+		//nav_Content_h = newImage("/images/nav_Content_h.jpg");
+		//nav_Community_h = newImage("/images/nav_Community_h.jpg");
+		//nav_ECommerce_h = newImage("/images/nav_ECommerce_h.jpg");
+		//nav_LinkGen_h = newImage("/images/nav_LinkGen_h.jpg");
+		//nav_Help_h = newImage("/images/nav_Helpt_h.jpg");
+		//nav_LogOff_h = newImage("/images/nav_LogOff_h.jpg");
 
 		preloadFlag = true;
 	}
