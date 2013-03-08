@@ -9,7 +9,7 @@ foreach ($_POST as $key => $value) {
 if (strlen($_POST["email"]) > "0") {
 
 	$msg = $data;
-	if (stristr($msg,"href") === FALSE && strpos($msg,"88888") == FALSE && strpos($msg,"hacker.org") == FALSE) {
+	if (stristr($msg,"href") === FALSE && strpos($msg,"88888") == FALSE && strpos($msg, "Laguna") == FALSE && strpos($msg, "Acunetix") == FALSE && strpos($msg, "http") == FALSE && strpos($msg, "sample@email.tst") == FALSE && strpos($msg,"hacker.org") == FALSE) {
 		mail("arthuredelstein@gmail.com","AEI Email List Signup",$msg);
 		mail("einstein@igc.org","AEI Email List Signup",$msg);
 	}

@@ -114,6 +114,17 @@ include 'headerFile.php';
 
 <script>
 
+function stopRKey(evt) { 
+  var evt = (evt) ? evt : ((event) ? event : null); 
+  var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 
+  if ((evt.keyCode == 13) && (node.type=="text"))  {return false;} 
+}
+
+var internationalFee = 5.00;
+
+document.onkeypress = stopRKey; 
+
+
 
 function gebi(theID) {
 	return document.getElementById(theID);
@@ -161,10 +172,10 @@ var bookTitle = new Array(
 
 var bookPrice = new Array(
 13.5,
+10,
 6,
 6,
-6,
-6,
+10,
 4,
 3,
 3,
@@ -174,7 +185,7 @@ var bookPrice = new Array(
 4,
 6,
 2,
-8);
+10);
 
 var formItems = new Array(
 "first_name",
@@ -184,91 +195,173 @@ var formItems = new Array(
 "country",
 "state",
 "zip",
-"custom",
+//"custom",
 "os0"
 );
 	
 
-function updateTotal() 	{
-	var q = gebi("country")
-	gebi("country_name").value = q.options[q.selectedIndex].text
+function countBook(i) {
+  var book = gebi(bookID[i]);
+  if (book != null)
+	  return parseInt(book.value);
+	else
+	  return 0;
+}
 
+function countBooks() {
+	var booksCount = 0;
+	for (i=0;i<bookID.length;++i) {
+		var bookCount = countBook(i);
+		if (! isNaN(bookCount)) {
+			booksCount += bookCount;
+		}
+	}
+	return booksCount;
+}
+
+function computeNetPrice() {
 	var netPrice = 0;
-	var shippingPrice = 0;
-	for (i=0;i<bookID.length;i++) {
-		var bookCount = parseInt(gebi(bookID[i]).value);
+	for (i=0;i<bookID.length;++i) {
+		var bookCount = countBook(i);
 		if (! isNaN(bookCount)) {
 			netPrice += bookCount * bookPrice[i];
-			shippingPrice += bookCount  * 1.50;
-			}
 		}
-	var totalCost = netPrice + shippingPrice
-
-	
-	gebi("subtotalCost").innerHTML = "<b>Subtotal:</b> $"+netPrice.toFixed(2);
-
-	if (gebi("country").value == "US") {
-		gebi("shippingCost").innerHTML="<b>Shipping:</b> $"+shippingPrice.toFixed(2);
-		gebi("totalCost").innerHTML="<b>Total:</b> $"+totalCost.toFixed(2);
-		gebi("shipping").value = shippingPrice;
-		gebi("subtotal").value=netPrice;
-		gebi("total").value=totalCost;
-		}
-	else {
-		gebi("shippingCost").innerHTML="<b>International order:<br></b>We will contact you with an estimate of shipping cost.<br>";
-		gebi("totalCost").innerHTML="";
-        gebi("subtotal").value = netPrice;
-		gebi("total").value = "to be calculated";
-        gebi("shipping").value = "to be calculated";
-		}
-
-	if (gebi("country").value == "US" && totalCost>0) {
-		gebi("submit2").disabled=false;
-		}
-	else {
-		gebi("submit2").disabled=true;
-		}
-
-	if (totalCost>0) {
-		gebi("submit1").disabled=false;
-		}
-	else {
-		gebi("submit1").disabled=true;
-		}
-
 	}
+	return netPrice;
+}
+
+
+function isUSorCA() {
+	var country = gebi("country").value;
+	return ((country == "US") || (country=="CA"));
+}
+
+function computeShipping(allBooksCount) {
+	var shippingPrice;
+	if (allBooksCount == 0) {
+		shippingPrice = 0;
+	} else if (allBooksCount == 1) {
+		shippingPrice = 3.00;
+	} else if (allBooksCount >= 2 && allBooksCount <=6) {
+		shippingPrice = 6.00;
+	} else if (allBooksCount >= 7 && allBooksCount <=24) {
+	  shippingPrice = 12.00;
+	} else if (allBooksCount >= 25) {
+		return null;
+	}
+	
+	var country = gebi("country").value;
+	if (!isUSorCA() && allBooksCount > 0) {
+	   shippingPrice += internationalFee; // International shipping fee
+	}
+	return shippingPrice;
+}
+
+function computeDonation() {
+	var donation = parseFloat(gebi("DONATION").value);
+	if (isNaN(donation)) {
+		donation = 0;
+	}
+	return donation;
+}
+
+function displayAmounts(netPriceStr, shippingPriceStr, donationStr, totalCostStr) {
+	if (!isUSorCA() && totalCostStr.length > 0) {
+		shippingPriceStr += " (incl. $5 international shipping fee)";
+	}
+	gebi("summary").innerHTML = [
+		"<b>Subtotal:</b> $"+netPriceStr,
+		"<b>Shipping:</b> $"+shippingPriceStr,
+		"<b>Donation:</b> $"+donationStr,
+		"<b>Total: $"+totalCostStr+"</b>"
+	].join("<br>");
+}
+
+function updateTotal() 	{
+	var netPrice = computeNetPrice();
+	var allBooksCount = countBooks();
+	var shipping = computeShipping(allBooksCount);
+	var donation = computeDonation();
+	var totalCost = netPrice + shipping + donation;
+	
+	if (shipping != null) {  // Regular order
+		displayAmounts(netPrice.toFixed(2), shipping.toFixed(2), donation.toFixed(2), totalCost.toFixed(2));
+		gebi("submit1").value = "Pay by Check";
+	  gebi("shipping-paypal").value = shipping;
+	} else { // Large order
+		gebi("summary").innerHTML = "<b>You have selected " + allBooksCount + " items. The Albert Einstein Institution will contact you to arrange shipping for orders of 25 books or more.</b>";
+		gebi("submit1").value = "Send large order";
+	}
+	
+	gebi("shipping").value = shipping;
+	gebi("subtotal").value=netPrice;
+	gebi("total").value=totalCost;
+	var country = gebi("country");
+	gebi("country_name").value = country.options[country.selectedIndex].text;
+	
+	if (totalCost>0 && shipping != null) {
+		gebi("submit1").disabled=false;
+		gebi("submit2").disabled=false;
+	} else if (totalCost>0 && shipping == null) {
+		gebi("submit1").disabled = false;
+		gebi("submit2").disabled = true;
+	} else {
+		gebi("submit1").disabled=true;
+		gebi("submit2").disabled=true;
+	}
+}
 
 function checkSubmission() {
 	updateTotal();
 	return true;
-
-	}
-
+}
 
 
+function copyFormItem(theForm,itemname) {
+  var item = gebi(itemname);
+  var val;
+  if (itemname != null)
+  	val = gebi(itemname).value;
+  else
+    val = 0;
+	addHiddenInput(theForm,itemname,val);
+}
 
 
 function submitPaypal() {
 	updateTotal();
+	
 	var theForm = gebi("paypalForm");
 	var j=0;
 	for (i=0;i<bookID.length;i++) {
-		bookCount = parseInt(gebi(bookID[i]).value);
+	  var book = gebi(bookID[i]);
+	  if (book != null)
+  		bookCount = parseInt(book.value);
+    else
+      bookCount = 0;
 		if (! isNaN(bookCount)) {
 			if (bookCount>0) {
 				j=j+1;
-				addPaypalItem(theForm,j,bookTitle[i],bookCount,bookPrice[i],bookCount * 1.50);
-				}
+				addPaypalItem(theForm,j,bookTitle[i],bookCount,bookPrice[i],bookCount * 3.00);
 			}
 		}
+	}
 
+	var donation = parseFloat(gebi("DONATION").value);
+	if (!isNaN(donation)) {
+		addPaypalItem(theForm, ++j, "Donation", 1, donation, 0);
+	}
+  
+	if (!isUSorCA() && countBooks() > 0) {
+		addPaypalItem(theForm, ++j, "International Shipping", 1, internationalFee, 0);
+	}
 
 	for (i=0;i<formItems.length;i++) {
 		copyFormItem(theForm,formItems[i]);
-		}
+	}
 
 	return true;
-	}
+}
 
 
 function addHiddenInput(theForm,name,value) {
@@ -277,20 +370,17 @@ function addHiddenInput(theForm,name,value) {
 	theInput.setAttribute("type","hidden");
 	theInput.setAttribute("value",value);
 	theForm.appendChild(theInput);
-	}
+}
 
-function copyFormItem(theForm,itemname) {
-	addHiddenInput(theForm,itemname,gebi(itemname).value);
-	}
-
-function addPaypalItem(theForm,idnumber,name,quantity,amount,shipping) {
+function addPaypalItem(theForm,idnumber,name,quantity,amount) {
 	addHiddenInput(theForm,"item_name_"+idnumber,name);
-	addHiddenInput(theForm,"amount_"+idnumber,amount)
-	addHiddenInput(theForm,"quantity_"+idnumber,quantity)
-	addHiddenInput(theForm,"shipping_"+idnumber,shipping)
-	}
+	addHiddenInput(theForm,"amount_"+idnumber,amount);
+	addHiddenInput(theForm,"quantity_"+idnumber,quantity);
+	//addHiddenInput(theForm,"shipping_"+idnumber,shipping)
+}
 
 
+document.onkeyup = updateTotal;
 
 </script>
 
@@ -301,7 +391,7 @@ function addPaypalItem(theForm,idnumber,name,quantity,amount,shipping) {
 
 <table width=400>
 <tr><td>
-<FORM onSubmit="checkSubmission()" NAME="input_form" id="input_form" ACTION="purchaseRequestTEST.php" METHOD="post">
+<FORM onSubmit="checkSubmission()" NAME="input_form" id="input_form" ACTION="purchaseRequest.php" METHOD="post">
 
 <input type="hidden" name="shipping" id="shipping" value="0">
 <input type="hidden" name="subtotal" id="subtotal" value="0">
@@ -347,7 +437,7 @@ not included in the prices below.</p>
   <TR>
     <TD>Sharp, Gene<br>
 <i>Self-Liberation</i><br>
-$8.00 (bulk discounts available)<br>
+$10.00 (bulk discounts available)<br>
 <!-- (Please email <a href="mailto:einstein@igc.org">einstein@igc.org</a> to order.) -->
 <hr></TD>
     <TD CLASS=""></TD>
@@ -364,7 +454,7 @@ $13.50 (bulk discounts available)<br><hr></TD>
   <TR>
     <TD>Sharp, Gene<br>
 <i>From Dictatorship to Democracy: A Conceptual Framework for Liberation</i><br>
-$6.00 (bulk discounts available)
+$10.00 (bulk discounts available)
 <br><hr></TD>
     <TD CLASS=""></TD>
     <TD><INPUT TYPE="text" NAME="Dictatorship_To_Democracy" ID="Dictatorship_To_Democracy" VALUE="" size=2 onchange="updateTotal()"></TD>
@@ -382,7 +472,7 @@ $6.00 (bulk discounts available)
 <i>There are Realistic Alternatives</i><br>$6.00 (bulk discounts available)
 <br><hr></TD>
     <TD CLASS=""></TD>
-    <TD><INPUT TYPE="text" NAME="Realistic_Alternatives" ID="Realistic_Alternatives" VALUE="" size=2 onchange="updateTotal()"></TD>
+  <TD><INPUT TYPE="text" NAME="Realistic_Alternatives" ID="Realistic_Alternatives" VALUE="" size=2 onchange="updateTotal()"></TD>
   </TR>
   <TR>
     <TD><br><b>Translations</b><br><hr></TD>
@@ -390,7 +480,7 @@ $6.00 (bulk discounts available)
   </TR>
   <TR>
     <TD>Sharp, Gene<br><i>De la Dictadura a la Democracia</i>
-<br>$6.00 (bulk discounts available)<br><hr></TD>
+<br>$10.00 (bulk discounts available)<br><hr></TD>
     <TD CLASS=""></TD>
     <TD><INPUT TYPE="text" NAME="DelaDict" ID="DelaDict" VALUE="" size=2 onchange="updateTotal()"></TD>
   </TR>
@@ -409,7 +499,7 @@ $4.00
     <TD><INPUT TYPE="text" NAME="M1_Insurrectionary_Civic_Strikes" ID="M1_Insurrectionary_Civic_Strikes" VALUE="" size=2 onchange="updateTotal()"></TD>
   </TR>
   <TR>
-    <TD>M2 Holst, Johan Jørgen<br>
+    <TD>M2 Holst, Johan Jorgen<br>
 <i>Civilian-based Defense in a New Era</i><br>
 $3.00
 <be><hr></TD>
@@ -428,12 +518,9 @@ $3.00
     <TD>M4 Roberts, Adam<br>
 <i>Civil Resistance in the East European and Soviet Revolutions</i><br>
 $4.00
-<br><i><b>Out of print.  Contact us for more information</i></i></b>
 <br><hr></TD>
     <TD CLASS=""></TD>
-    <!----
     <TD><INPUT TYPE="text" NAME="M4_Civil_Resistance" ID="M4_Civil_Resistance" VALUE="" size=2 onchange="updateTotal()"></TD>
-  ---->
   </TR>
   <TR>
     <TD>M5 Eglitis, Olgerts<br>
@@ -486,20 +573,8 @@ $2.00<br><hr></TD>
 $4.00<br><i><b>Out of print.  Contact us for more information</i></b><hr></TD>
     <TD CLASS=""></TD>
   </TR>
-<tr><td>
-<div id=subtotalCost name=subtotalCost>
-<b>Subtotal:</b> $0.00
-</div>
-<div id=shippingCost name=shippingCost>
-<b>Shipping:</b> $0.00
-</div>
-<div id=totalCost name=totalCost>
-<b>Total:</b> $0.00
-</div></td>
-</tr>
   </table>
-<hr>
-<br><br>
+
 <table cellspacing=5>
 <tr>
 <td colspan=3>
@@ -569,39 +644,60 @@ include("countryMenu.html");
     <TD><INPUT TYPE="text" NAME="Fax" VALUE="" size="20" maxlength="20"></TD>
   </TR>
 </table>
-<br>
 
+<hr>
+  <table>
+    <TR>
+    <TD><font color=blue><b>Optional donation</b></font> to support the work of the Albert Einstein Institution (Thank you!)<br>
+    <TD CLASS=""></TD>
+    <TD width=150>$<INPUT TYPE="text" NAME="DONATION" ID="DONATION" VALUE="" size=6 onchange="updateTotal()"></TD>
+  </TR>
+  </table>
+<hr>
+  <table>
+<tr><td>
+<div id=summary name=summary>
+</div></td>
+</tr>
+  </table>
+  
 <table>
-
+<hr>
+<!--
   <TR>
     <TD>
 Would you like to sign-up on the Albert Einstein Institution<br>e-mail list for updates about our activities?<br>
 <INPUT TYPE="radio" NAME="signup" VALUE="yes">yes</INPUT><INPUT TYPE="radio" NAME="signup" VALUE=" no"> no</INPUT>
 </TD>
 </TR>
-
+-->
+<!--
 <tr>
     <TD>Comment:</TD>
 </tr>
+
 <tr>
-    <TD><TEXTAREA NAME="Comment" rows=''4'' cols="50" id="custom" wrap=''virtual''></TEXTAREA><INPUT TYPE="hidden" NAME="processID" VALUE="3"><INPUT TYPE="hidden" NAME="orgid" VALUE="88"><INPUT TYPE="hidden" NAME="requiredFields" VALUE="First_Name,Last_Name,Address,City,State,Zip,email,Check_Credit"><INPUT TYPE="hidden" NAME="gotoStep" VALUE="2"><INPUT TYPE="hidden" NAME="signupMethod" VALUE="webPage"></TD>
+    <TD><TEXTAREA NAME="Custom" rows=''4'' cols="50" id="custom" wrap=''virtual''></TEXTAREA><INPUT TYPE="hidden" NAME="processID" VALUE="3"><INPUT TYPE="hidden" NAME="orgid" VALUE="88"><INPUT TYPE="hidden" NAME="requiredFields" VALUE="First_Name,Last_Name,Address,City,State,Zip,email,Check_Credit"><INPUT TYPE="hidden" NAME="gotoStep" VALUE="2"><INPUT TYPE="hidden" NAME="signupMethod" VALUE="webPage"></TD>
 </TR>
+-->
 <TR>
    <TD  COLSPAN="3">
 <INPUT onClick="javascript:submitChoice=1" TYPE="submit" VALUE="Pay by Check" id="submit1" NAME="form_action"> 
 </form>
 
 <form id="paypalForm" action=https://www.paypal.com/us/cgi-bin/webscr method="post" onSubmit="submitPaypal()">
-<!--<input type="submit" id="submit2" name="submit2" VALUE="Pay by Credit Card or Paypal">-->
+<input type="submit" id="submit2" name="submit2" VALUE="Pay by Credit Card or Paypal">
 
 <input type="hidden" name="cmd" value="_cart">
 <input type="hidden" name="upload" value="1">
 <input type="hidden" name="business" value="alberteinsteininstitution@gmail.com">
 <input type="hidden" name="currency_code" value="USD">
 <input type="hidden" name="rm" value="2">
-<input type="hidden" name="return" value="http://aeinstein.org/purchaseRequestTEST.php">
+<input type="hidden" name="return" value="http://aeinstein.org/thanksForYourOrder.html">
+<input type="hidden" name="cancel_return" value="http://aeinstein.org/index85cd.html">
 <input type="hidden" name="on0" value="email">
 <input type="hidden" name="address_override" value="1">
+<input type="hidden" name="shipping" id="shipping-paypal" value="0">
 </FORM>
 
 </TD>
